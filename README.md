@@ -1,7 +1,7 @@
-# Kriging Library
+# Kriging
 
 ## Introdução
-A **Kriging Library** é uma implementação em Python do método de krigagem, uma técnica de interpolação geoestatística usada para construir modelos substitutos baseados em amostras discretas de um domínio. O objetivo da krigagem é estimar valores em novos pontos com base em uma função de variograma que descreve a estrutura espacial da variável de interesse.
+A biblioteca **Kriging** é uma implementação em Python do método de krigagem, uma técnica de interpolação geoestatística usada para construir modelos substitutos baseados em amostras discretas de um domínio. O objetivo da krigagem é estimar valores em novos pontos com base em uma função de variograma que descreve a estrutura espacial da variável de interesse.
 
 Esta biblioteca permite:
 - Ajustar um variograma com os melhores parâmetros.
