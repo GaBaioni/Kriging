@@ -13,9 +13,7 @@ A krigagem assume que a variável de interesse $Z(x)$ pode ser modelada como um 
 
 ### Variograma
 O **variograma** é uma função que descreve a dependência espacial entre pontos amostrados. Ele é definido como:
-$$
-\gamma(h) = \frac{1}{2} E[(Z(x) - Z(x+h))^2]
-$$
+$$\gamma(h) = \frac{1}{2} E[(Z(x) - Z(x+h))^2]$$
 onde:
 - $h$ é a distância entre os pontos.
 - $Z(x)$ e $Z(x+h)$ são os valores da variável de interesse em diferentes posições.
@@ -23,22 +21,16 @@ onde:
 
 A biblioteca implementa três modelos comuns de variogramas:
 1. **Exponencial**:
-   $\
-   \gamma(h) = C_0 + C (1 - e^{-3h/\alpha})
-   \$
+   $$\gamma(h) = C_0 + C (1 - e^{-3h/\alpha})$$
 2. **Esférico**:
-   $\
-   \gamma(h) = C_0 + C \left( \frac{3}{2} \frac{h}{\alpha} - \frac{1}{2} \left(\frac{h}{\alpha}\right)^3 \right), \quad h < \alpha
-   \$
+   $$\gamma(h) = C_0 + C \left( \frac{3}{2} \frac{h}{\alpha} - \frac{1}{2} \left(\frac{h}{\alpha}\right)^3 \right), \quad h < \alpha$$
 3. **Gaussiano**:
-   $\
-   \gamma(h) = C_0 + C (1 - e^{-3(h/\alpha)^2})
-   \$
+   $\gamma(h) = C_0 + C (1 - e^{-3(h/\alpha)^2})$$
 
 Onde:
-- $ C_0 $ é o efeito pepita (variabilidade independente da distância).
-- $ C $ é o patamar (máximo valor do variograma).
-- $ \alpha $ é o alcance (distância onde o variograma atinge seu patamar).
+- $C_0$ é o efeito pepita (variabilidade independente da distância).
+- $C $é o patamar (máximo valor do variograma).
+- $\alpha$ é o alcance (distância onde o variograma atinge seu patamar).
 
 ### Construção da Matriz de Covariância
 A matriz de covariância é construída a partir do variograma ajustado. Para um conjunto de $ n $ pontos, a matriz é definida como:
@@ -54,14 +46,10 @@ Essa matriz é usada para resolver o sistema linear dos pesos $ \lambda $, permi
 
 ### Predição de Novos Pontos
 A interpolação em um novo ponto $ x^* $ usa a equação:
-$\
-Z^*(x^*) = \sum_{i=1}^{n} \lambda_i Z(x_i)
-\$
+$$Z^*(x^*) = \sum_{i=1}^{n} \lambda_i Z(x_i)$$
 Onde os pesos $ \lambda_i $ são obtidos resolvendo:
-$\
-\mathbf{C} \lambda = \mathbf{r}
-\$
-com $ \mathbf{r} $ sendo o vetor das covariâncias entre os novos pontos e os pontos amostrados.
+$$\mathbf{C} \lambda = \mathbf{r}$$
+com $\mathbf{r}$ sendo o vetor das covariâncias entre os novos pontos e os pontos amostrados.
 
 ## Estrutura da Biblioteca
 A biblioteca possui a seguinte estrutura:
