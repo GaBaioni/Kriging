@@ -1,36 +1,103 @@
-# KrigingModel
+# Kriging Library
 
-**KrigingModel** é uma implementação em Python para interpolação de dados usando o método de krigagem (kriging). A classe suporta tanto modelos unidimensionais quanto multidimensionais, fornecendo uma forma flexível e prática para a construção de metamodelos que permitem prever valores desconhecidos com base em dados de amostragem.
+## Introdução
+A **Kriging Library** é uma implementação em Python do método de krigagem, uma técnica de interpolação geoestatística usada para construir modelos substitutos baseados em amostras discretas de um domínio. O objetivo da krigagem é estimar valores em novos pontos com base em uma função de variograma que descreve a estrutura espacial da variável de interesse.
 
-## Funcionalidades
+Esta biblioteca permite:
+- Ajustar um variograma com os melhores parâmetros.
+- Construir uma matriz de covariância.
+- Prever valores em novos pontos com base na interpolação geoestatística.
 
-- **Ajuste dos pesos via kriging**: A classe ajusta automaticamente os pesos dos pontos de amostragem, utilizando uma função de variograma para modelar a relação espacial entre os dados.
-- **Previsão de novos valores**: A partir dos pesos ajustados, a classe é capaz de prever valores em novos pontos, utilizando os dados já conhecidos.
-- **Cálculo do erro quadrático médio (MSE)**: A classe permite calcular o erro quadrático médio (MSE) para avaliar a precisão do modelo, comparando as previsões feitas com os valores reais de um conjunto de validação.
-- **Suporte para múltiplas dimensões**: A classe é capaz de lidar com dados em múltiplas dimensões (1D, 2D, 3D, etc.), possibilitando a aplicação da técnica de krigagem em cenários mais complexos.
-- **Variograma personalizável**: O usuário pode definir sua própria função de variograma, o que permite flexibilidade na modelagem da dependência espacial dos dados.
+## Fundamentos Teóricos
+A krigagem assume que a variável de interesse \( Z(x) \) pode ser modelada como um processo estocástico com média e estrutura de covariância bem definidas. O processo se baseia na minimização do erro quadrático médio entre os valores estimados e os valores reais.
 
-## Estrutura da Classe
+### Variograma
+O **variograma** é uma função que descreve a dependência espacial entre pontos amostrados. Ele é definido como:
+\[
+\gamma(h) = \frac{1}{2} E[(Z(x) - Z(x+h))^2]
+\]
+onde:
+- \( h \) é a distância entre os pontos.
+- \( Z(x) \) e \( Z(x+h) \) são os valores da variável de interesse em diferentes posições.
+- \( \gamma(h) \) representa a variação esperada entre dois pontos separados pela distância \( h \).
 
-A classe **KrigingModel** é composta por funções que facilitam o ajuste dos pesos dos pontos de amostragem e a previsão de novos valores. A estrutura básica da classe envolve as seguintes etapas:
+A biblioteca implementa três modelos comuns de variogramas:
+1. **Exponencial**:
+   \[
+   \gamma(h) = C_0 + C (1 - e^{-3h/\alpha})
+   \]
+2. **Esférico**:
+   \[
+   \gamma(h) = C_0 + C \left( \frac{3}{2} \frac{h}{\alpha} - \frac{1}{2} \left(\frac{h}{\alpha}\right)^3 \right), \quad h < \alpha
+   \]
+3. **Gaussiano**:
+   \[
+   \gamma(h) = C_0 + C (1 - e^{-3(h/\alpha)^2})
+   \]
 
-1. **Inicialização dos Dados de Treinamento**: A classe é inicializada com um conjunto de pontos de amostragem (conjunto de treinamento), bem como seus valores correspondentes. Também é fornecida uma função de variograma que define a relação espacial entre os pontos.
+Onde:
+- \( C_0 \) é o efeito pepita (variabilidade independente da distância).
+- \( C \) é o patamar (máximo valor do variograma).
+- \( \alpha \) é o alcance (distância onde o variograma atinge seu patamar).
 
-2. **Matriz de Distâncias**: Para modelar a relação espacial entre os pontos, a classe calcula a matriz de distâncias entre os pontos de amostragem e, posteriormente, entre os pontos de amostragem e os novos pontos para os quais deseja-se realizar previsões.
+### Construção da Matriz de Covariância
+A matriz de covariância é construída a partir do variograma ajustado. Para um conjunto de \( n \) pontos, a matriz é definida como:
+\[
+\mathbf{C} = \begin{bmatrix}
+\gamma(h_{11}) & \gamma(h_{12}) & \dots & 1 \\
+\gamma(h_{21}) & \gamma(h_{22}) & \dots & 1 \\
+\vdots & \vdots & \ddots & \vdots \\
+1 & 1 & \dots & 0
+\end{bmatrix}
+\]
+Essa matriz é usada para resolver o sistema linear dos pesos \( \lambda \), permitindo a estimativa de novos valores.
 
-3. **Matriz de Covariância**: Utilizando as distâncias calculadas e a função de variograma, a classe constrói a matriz de covariância. Essa matriz captura a dependência espacial entre os pontos de amostragem, o que é crucial para ajustar os pesos.
+### Predição de Novos Pontos
+A interpolação em um novo ponto \( x^* \) usa a equação:
+\[
+Z^*(x^*) = \sum_{i=1}^{n} \lambda_i Z(x_i)
+\]
+Onde os pesos \( \lambda_i \) são obtidos resolvendo:
+\[
+\mathbf{C} \lambda = \mathbf{r}
+\]
+com \( \mathbf{r} \) sendo o vetor das covariâncias entre os novos pontos e os pontos amostrados.
 
-4. **Ajuste dos Pesos**: Os pesos (ou coeficientes) dos pontos de amostragem são ajustados de maneira a minimizar o erro entre os valores preditos e os valores observados nos pontos de amostragem. Isso é feito resolvendo um sistema de equações que envolve a matriz de covariância e a função de variograma.
+## Estrutura da Biblioteca
+A biblioteca possui a seguinte estrutura:
 
-5. **Previsão de Novos Valores**: Após o ajuste dos pesos, é possível prever o valor de uma nova variável, dado um novo ponto de entrada. Essa previsão é obtida como uma combinação ponderada dos valores conhecidos nos pontos de amostragem.
+- **`Kriging`**: Classe principal que contém os métodos para ajuste do variograma, construção da matriz de covariância e predição.
+  - `__init__(self, X, Y, model='exponential')`: Inicializa o modelo e ajusta os parâmetros do variograma.
+  - `variogram_function(self, h, C0, C, alpha)`: Define o modelo de variograma escolhido.
+  - `fit_variogram(self)`: Ajusta os parâmetros do variograma otimizando \( C_0 \), \( C \) e \( \alpha \).
+  - `build_covariance_matrix(self)`: Constrói a matriz de covariância para os pontos amostrados.
+  - `predict(self, X_new)`: Realiza a interpolação nos novos pontos.
 
-6. **Erro Quadrático Médio (MSE)**: A precisão do modelo pode ser avaliada usando um conjunto de validação, calculando-se o erro quadrático médio (MSE) entre os valores reais e os valores previstos.
+## Uso da Biblioteca
+Após importar a biblioteca, um usuário pode fornecer dados experimentais e escolher um modelo de variograma para treinar e fazer previsões:
 
-## Uso
+```python
+from kriging_library import Kriging
+import numpy as np
 
-A classe **KrigingModel** é ideal para construir metamodelos em cenários onde há uma relação espacial (ou de proximidade) entre os dados, permitindo a previsão de valores desconhecidos. A técnica de krigagem é amplamente utilizada em áreas como geostatística, engenharia e ciências ambientais, e a implementação flexível desta classe permite seu uso em diversas outras áreas, incluindo otimização e simulação.
+# Dados de entrada
+X_train = np.array([[0], [1], [2], [3], [4]])
+Y_train = np.array([10, 12, 18, 25, 30])
 
-## Conjunto de Dados de Validação
+# Criando o modelo de Kriging
+model = Kriging(X_train, Y_train, model='exponential')
 
-Ao utilizar a classe **KrigingModel**, recomenda-se a aplicação do modelo a um conjunto de dados conhecidos (conjunto de treinamento), seguido da validação do modelo com um conjunto de pontos não utilizados no treinamento. A validação é importante para garantir que o modelo não esteja superajustado aos dados de amostragem e que seja capaz de generalizar bem para novos dados. O cálculo do erro quadrático médio (MSE) fornece uma métrica direta da precisão do modelo, ajudando a identificar possíveis ajustes no variograma ou nos dados de entrada.
+# Prevendo um novo ponto
+X_new = np.array([[2.5]])
+pred = model.predict(X_new)
+print(f'Predição para X_new: {pred}')
+```
+
+## Conclusão
+A **Kriging Library** permite a interpolação eficiente de dados usando métodos geoestatísticos, tornando-se útil para aplicações em otimização de processos, engenharia e ciência de dados. O modelo ajusta automaticamente os parâmetros do variograma, constrói a matriz de covariância e fornece previsões baseadas na estrutura espacial dos dados.
+
+## Referências
+- Cressie, N. (1993). *Statistics for Spatial Data*. Wiley.
+- Journel, A. G., & Huijbregts, C. J. (1978). *Mining Geostatistics*. Academic Press.
+- Matheron, G. (1963). *Principles of Geostatistics*. Economic Geology.
 
