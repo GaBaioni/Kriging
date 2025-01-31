@@ -23,12 +23,15 @@ onde:
 
 A biblioteca implementa três modelos comuns de variogramas:
 1. **Exponencial**:
+   
    $$\gamma(h) = C_0 + C (1 - e^{-3h/\alpha})$$
       
 3. **Esférico**:
-   $$\gamma(h) = C_0 + C \left( \frac{3}{2} \frac{h}{\alpha} - \frac{1}{2} \left(\frac{h}{\alpha}\right)^3 \right), \quad h < \alpha$$  
    
+   $$\gamma(h) = C_0 + C \left( \frac{3}{2} \frac{h}{\alpha} - \frac{1}{2} \left(\frac{h}{\alpha}\right)^3 \right), \quad h < \alpha$$
+      
 5. **Gaussiano**:
+   
    $\gamma(h) = C_0 + C (1 - e^{-3(h/\alpha)^2})$$  
    
 Onde:
@@ -46,18 +49,18 @@ $$\mathbf{C} = \begin{bmatrix}
 1 & 1 & \dots & 0
 \end{bmatrix}$$
 
-Essa matriz é usada para resolver o sistema linear dos pesos $ \lambda $, permitindo a estimativa de novos valores.
+Essa matriz é usada para resolver o sistema linear dos pesos $\lambda$, permitindo a estimativa de novos valores.
 
 ### Predição de Novos Pontos
 A interpolação em um novo ponto $x^*$ usa a equação:  
 
-$$Z^*(x^*)=\sum_{i=1}^{n}.\lambda_i Z(x_i)$$  
+$$Z^*(x^ *)= \sum_{i=1}^{n} \lambda_i Z(x_i)$$$$ 
 
 Onde os pesos $\lambda_i$ são obtidos resolvendo:  
 
 $$\mathbf{C} \lambda = \mathbf{r}$$  
 
-com $$mathbf{r}$$ sendo o vetor das covariâncias entre os novos pontos e os pontos amostrados.
+com $$\mathbf{r}$$ sendo o vetor das covariâncias entre os novos pontos e os pontos amostrados.
 
 ## Estrutura da Biblioteca
 A biblioteca possui a seguinte estrutura:
@@ -65,7 +68,7 @@ A biblioteca possui a seguinte estrutura:
 - **`Kriging`**: Classe principal que contém os métodos para ajuste do variograma, construção da matriz de covariância e predição.
   - `__init__(self, X, Y, model='exponential')`: Inicializa o modelo e ajusta os parâmetros do variograma.
   - `variogram_function(self, h, C0, C, alpha)`: Define o modelo de variograma escolhido.
-  - `fit_variogram(self)`: Ajusta os parâmetros do variograma otimizando $ C_0 $, $ C $ e $ \alpha $.
+  - `fit_variogram(self)`: Ajusta os parâmetros do variograma otimizando $C_0$, $C$ e $\alpha$.
   - `build_covariance_matrix(self)`: Constrói a matriz de covariância para os pontos amostrados.
   - `predict(self, X_new)`: Realiza a interpolação nos novos pontos.
 
