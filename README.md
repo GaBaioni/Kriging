@@ -9,17 +9,17 @@ Esta biblioteca permite:
 - Prever valores em novos pontos com base na interpolação geoestatística.
 
 ## Fundamentos Teóricos
-A krigagem assume que a variável de interesse $ Z(x) $ pode ser modelada como um processo estocástico com média e estrutura de covariância bem definidas. O processo se baseia na minimização do erro quadrático médio entre os valores estimados e os valores reais.
+A krigagem assume que a variável de interesse $Z(x)$ pode ser modelada como um processo estocástico com média e estrutura de covariância bem definidas. O processo se baseia na minimização do erro quadrático médio entre os valores estimados e os valores reais.
 
 ### Variograma
 O **variograma** é uma função que descreve a dependência espacial entre pontos amostrados. Ele é definido como:
-$\
+$$
 \gamma(h) = \frac{1}{2} E[(Z(x) - Z(x+h))^2]
-\$
+$$
 onde:
-- $ h $ é a distância entre os pontos.
-- $ Z(x) $ e $ Z(x+h) $ são os valores da variável de interesse em diferentes posições.
-- $ \gamma(h) $ representa a variação esperada entre dois pontos separados pela distância $ h $.
+- $h$ é a distância entre os pontos.
+- $Z(x)$ e $Z(x+h)$ são os valores da variável de interesse em diferentes posições.
+- $\gamma(h)$ representa a variação esperada entre dois pontos separados pela distância $ h $.
 
 A biblioteca implementa três modelos comuns de variogramas:
 1. **Exponencial**:
