@@ -40,7 +40,7 @@ Onde:
 - $\alpha$ é o alcance (distância onde o variograma atinge seu patamar).
 
 ### Construção da Matriz de Covariância
-A matriz de covariância é construída a partir do variograma ajustado. Para um conjunto de $ n $ pontos, a matriz é definida como:  
+A matriz de covariância é construída a partir do variograma ajustado. Para um conjunto de $n$ pontos, a matriz é definida como:  
 
 $$\mathbf{C} = \begin{bmatrix}
 \gamma(h_{11}) & \gamma(h_{12}) & \dots & 1 \\
@@ -54,7 +54,7 @@ Essa matriz é usada para resolver o sistema linear dos pesos $\lambda$, permiti
 ### Predição de Novos Pontos
 A interpolação em um novo ponto $x^*$ usa a equação:  
 
-$$Z^*(x^ *)= \sum_{i=1}^{n} \lambda_i Z(x_i)$$$$ 
+$$Z^*(x^ *)= \sum_{i=1}^{n} \lambda_i Z(x_i)$$
 
 Onde os pesos $\lambda_i$ são obtidos resolvendo:  
 
