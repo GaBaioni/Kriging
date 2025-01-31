@@ -49,11 +49,11 @@ $$\mathbf{C} = \begin{bmatrix}
 Essa matriz é usada para resolver o sistema linear dos pesos $ \lambda $, permitindo a estimativa de novos valores.
 
 ### Predição de Novos Pontos
-A interpolação em um novo ponto $ x^* $ usa a equação:  
+A interpolação em um novo ponto $x^*$ usa a equação:  
 
-$$Z^*(x^*) = \sum_{i=1}^{n} \lambda_i Z(x_i)$$  
+$$Z^*(x^*)=\sum_{i=1}^{n}.\lambda_i Z(x_i)$$  
 
-Onde os pesos $ \lambda_i $ são obtidos resolvendo:  
+Onde os pesos $\lambda_i$ são obtidos resolvendo:  
 
 $$\mathbf{C} \lambda = \mathbf{r}$$  
 
