@@ -19,7 +19,7 @@ $$\gamma(h) = \frac{1}{2} E[(Z(x) - Z(x+h))^2]$$
 onde:
 - $h$ é a distância entre os pontos.
 - $Z(x)$ e $Z(x+h)$ são os valores da variável de interesse em diferentes posições.
-- $\gamma(h)$ representa a variação esperada entre dois pontos separados pela distância $ h $.
+- $\gamma(h)$ representa a variação esperada entre dois pontos separados pela distância $h$.
 
 A biblioteca implementa três modelos comuns de variogramas:
 1. **Exponencial**:
